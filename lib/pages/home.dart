@@ -11,7 +11,7 @@ Future<List<UserModel>> fetchUsers() async {
     // Parse the JSON response
     List jsonResponse = json.decode(response.body);
     // Map each item to a Post object
-    return jsonResponse.map((post) => UserModel.fromJson(post)).toList();
+    return jsonResponse.map((user) => UserModel.fromJson(user)).toList();
   } else {
     throw Exception('Failed to load users');
   }
@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late Future<List<UserModel>> futureUsers;
   List<UserModel> _users = [];
   List<UserModel> _filteredUsers = [];
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     futureUsers.then((users) {
       setState(() {
         _users = users;
-        _filteredUsers = users; // Initially show all posts
+        _filteredUsers = users; // Initially show all users
       });
     });
     _searchController.addListener(_filterUsers);
@@ -101,29 +101,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
 
                 return _filteredUsers.isNotEmpty
-                    ? SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          columns: const [
-                            DataColumn(label: Text('ID')),
-                            DataColumn(label: Text('Name')),
-                            DataColumn(label: Text('Username')),
-                            DataColumn(label: Text('Email')),
-                            DataColumn(label: Text('Company')),
-                          ],
-                          rows: _filteredUsers
-                              .map(
-                                (user) => DataRow(
-                                  cells: [
-                                    DataCell(Text(user.id.toString())),
-                                    DataCell(Text(user.name)),
-                                    DataCell(Text(user.username)),
-                                    DataCell(Text(user.email)),
-                                    DataCell(Text(user.company.name)),
-                                  ],
-                                ),
-                              )
-                              .toList(),
+                    ? Center(
+                        child: Container(
+                          constraints: BoxConstraints(
+                              minWidth: MediaQuery.of(context).size.width),
+                          child: dataTable(),
                         ),
                       )
                     : const Padding(
@@ -135,6 +117,21 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
+    );
+  }
+
+  PaginatedDataTable dataTable() {
+    return PaginatedDataTable(
+      header: const Text('Users'),
+      columns: const [
+        DataColumn(label: Text('ID')),
+        DataColumn(label: Text('Name')),
+        DataColumn(label: Text('Username')),
+        DataColumn(label: Text('Email')),
+        DataColumn(label: Text('Company')),
+      ],
+      source: UserDataSource(_filteredUsers),
+      rowsPerPage: 5, columnSpacing: 120, // Space between columns
     );
   }
 
@@ -207,4 +204,31 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+}
+
+class UserDataSource extends DataTableSource {
+  final List<UserModel> users;
+
+  UserDataSource(this.users);
+
+  @override
+  DataRow? getRow(int index) {
+    if (index >= users.length) return null;
+
+    final user = users[index];
+    return DataRow(cells: [
+      DataCell(Text(user.id.toString())),
+      DataCell(Text(user.name)),
+      DataCell(Text(user.username)),
+      DataCell(Text(user.email)),
+      DataCell(Text(user.company.name)),
+    ]);
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+  @override
+  int get rowCount => users.length;
+  @override
+  int get selectedRowCount => 0;
 }
