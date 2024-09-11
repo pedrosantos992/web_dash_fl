@@ -10,7 +10,7 @@ Future<List<UserModel>> fetchUsers() async {
   if (response.statusCode == 200) {
     // Parse the JSON response
     List jsonResponse = json.decode(response.body);
-    // Map each item to a Post object
+    // Map each item to a User object
     return jsonResponse.map((user) => UserModel.fromJson(user)).toList();
   } else {
     throw Exception('Failed to load users');
