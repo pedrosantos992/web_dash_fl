@@ -129,8 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
         DataColumn(label: Text('Username')),
         DataColumn(label: Text('Email')),
         DataColumn(label: Text('Company')),
+        DataColumn(label: Text('')),
       ],
-      source: UserDataSource(_filteredUsers),
+      source: UserDataSource(_filteredUsers, context),
       rowsPerPage: 5, columnSpacing: 120, // Space between columns
     );
   }
@@ -208,8 +209,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class UserDataSource extends DataTableSource {
   final List<UserModel> users;
+  final BuildContext context;
 
-  UserDataSource(this.users);
+  UserDataSource(this.users, this.context);
 
   @override
   DataRow? getRow(int index) {
@@ -222,7 +224,47 @@ class UserDataSource extends DataTableSource {
       DataCell(Text(user.username)),
       DataCell(Text(user.email)),
       DataCell(Text(user.company.name)),
+      DataCell(
+        TextButton(
+          onPressed: () {
+            showUserDialog(user);
+          },
+          child: const Icon(Icons.mode_edit),
+        ),
+      ),
     ]);
+  }
+
+  Future<dynamic> showUserDialog(UserModel user) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('User Info'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ..._buildUserInfo([
+                'ID: ${user.id}',
+                'Name: ${user.name}',
+                'Username: ${user.username}',
+                'Email: ${user.email}',
+                'Company Name: ${user.company.name}',
+              ]),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -231,4 +273,13 @@ class UserDataSource extends DataTableSource {
   int get rowCount => users.length;
   @override
   int get selectedRowCount => 0;
+}
+
+List<Widget> _buildUserInfo(List<String> userInfo) {
+  return userInfo.map((info) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Text(info),
+    );
+  }).toList();
 }
