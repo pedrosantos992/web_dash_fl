@@ -143,16 +143,18 @@ class _MyHomePageState extends State<MyHomePage> {
       title: Text(widget.title),
       actions: !isMobile
           ? [
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                      context, '/about'); // Navigate to the About page
-                },
-                child: const Text(
-                  'About',
-                  style: TextStyle(color: Colors.white),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/analytics');
+                  },
+                  child: const Text(
+                    'Analytics',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
+              )
             ]
           : null,
     );
@@ -194,10 +196,10 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.info),
-              title: const Text('About'),
+              leading: const Icon(Icons.bar_chart),
+              title: const Text('Analytics'),
               onTap: () {
-                Navigator.pushNamed(context, '/about');
+                Navigator.pushNamed(context, '/analytics');
               },
             ),
           ],
@@ -229,7 +231,7 @@ class UserDataSource extends DataTableSource {
           onPressed: () {
             showUserDialog(user);
           },
-          child: const Icon(Icons.mode_edit),
+          child: const Icon(Icons.visibility),
         ),
       ),
     ]);
