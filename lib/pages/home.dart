@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import '../models/user_model.dart';
 
 Future<List<UserModel>> fetchUsers() async {
-  final response =
-      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
+  final response = await http.get(Uri.parse(
+      'https://raw.githubusercontent.com/pedrosantos992/web_dash_fl/main/assets/users.json'));
 
   if (response.statusCode == 200) {
     // Parse the JSON response
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
           user.name.toLowerCase(),
           user.username.toLowerCase(),
           user.email.toLowerCase(),
-          user.company.name.toLowerCase(),
+          user.country.toLowerCase(),
         ];
         return searchableFields.any((field) => field.contains(query));
       }).toList();
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
               controller: _searchController,
               decoration: InputDecoration(
                   labelText: "Search",
-                  hintText: "Search by name or company",
+                  hintText: "Search by name",
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -124,15 +124,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return PaginatedDataTable(
       header: const Text('Users'),
       columns: const [
-        DataColumn(label: Text('ID')),
         DataColumn(label: Text('Name')),
         DataColumn(label: Text('Username')),
         DataColumn(label: Text('Email')),
-        DataColumn(label: Text('Company')),
+        DataColumn(label: Text('Country')),
+        DataColumn(label: Text('Shirt Size')),
         DataColumn(label: Text('')),
       ],
       source: UserDataSource(_filteredUsers, context),
-      rowsPerPage: 5, columnSpacing: 120, // Space between columns
+      rowsPerPage: 10, columnSpacing: 40, // Space between columns
     );
   }
 
@@ -221,11 +221,11 @@ class UserDataSource extends DataTableSource {
 
     final user = users[index];
     return DataRow(cells: [
-      DataCell(Text(user.id.toString())),
       DataCell(Text(user.name)),
       DataCell(Text(user.username)),
       DataCell(Text(user.email)),
-      DataCell(Text(user.company.name)),
+      DataCell(Text(user.country)),
+      DataCell(Text(user.shirtSize)),
       DataCell(
         TextButton(
           onPressed: () {
@@ -248,11 +248,11 @@ class UserDataSource extends DataTableSource {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ..._buildUserInfo([
-                'ID: ${user.id}',
                 'Name: ${user.name}',
                 'Username: ${user.username}',
                 'Email: ${user.email}',
-                'Company Name: ${user.company.name}',
+                'Country: ${user.country}',
+                'Shirt Size: ${user.shirtSize}',
               ]),
             ],
           ),
