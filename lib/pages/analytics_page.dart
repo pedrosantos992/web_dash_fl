@@ -72,10 +72,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   const SizedBox(height: 20),
 
                   // Display the chart based on the selected option
-                  if (_selectedOption == "gender" ||
-                      _selectedOption == "country")
+                  if (_selectedOption == "country")
                     Expanded(child: _buildBarChart())
-                  else if (_selectedOption == "shirt_size")
+                  else if (_selectedOption == "gender" ||
+                      _selectedOption == "shirt_size")
                     Expanded(child: _buildPieChart()),
                 ],
               ),
@@ -91,31 +91,47 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       chartData[key] = (chartData[key] ?? 0) + 1;
     }
 
-    return BarChart(
-      BarChartData(
-        barGroups: chartData.entries.map((entry) {
-          return BarChartGroupData(
-            x: entry.key.hashCode,
-            barRods: [
-              BarChartRodData(
-                toY: entry.value.toDouble(),
-                color: Colors.blue,
-                width: 15,
-              ),
-            ],
-          );
-        }).toList(),
-        titlesData: FlTitlesData(
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              getTitlesWidget: (double value, TitleMeta meta) {
-                final title = chartData.keys.firstWhere(
-                  (key) => key.hashCode == value.toInt(),
-                  orElse: () => '',
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 72.0),
+        child: SizedBox(
+          width: chartData.length *
+              80.0, // Adjust width based on the number of bars
+          child: BarChart(
+            BarChartData(
+              barGroups: chartData.entries.map((entry) {
+                return BarChartGroupData(
+                  x: entry.key.hashCode,
+                  barRods: [
+                    BarChartRodData(
+                      toY: entry.value.toDouble(),
+                      color: Colors.green,
+                      width: 15,
+                    ),
+                  ],
                 );
-                return Text(title);
-              },
+              }).toList(),
+              titlesData: FlTitlesData(
+                topTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (double value, TitleMeta meta) {
+                      final title = chartData.keys.firstWhere(
+                        (key) => key.hashCode == value.toInt(),
+                        orElse: () => '',
+                      );
+                      return Text(title);
+                    },
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -135,7 +151,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       PieChartData(
         sections: chartData.entries.map((entry) {
           return PieChartSectionData(
-            title: entry.key,
+            title: "${entry.key}: ${entry.value.toString()}",
             value: entry.value.toDouble(),
             color: _getRandomColor(entry.key),
           );
