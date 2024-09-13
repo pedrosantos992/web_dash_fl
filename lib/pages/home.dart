@@ -154,6 +154,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/settings');
+                  },
+                  child: const Text(
+                    'Settings',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               )
             ]
           : null,
@@ -200,6 +212,13 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('Analytics'),
               onTap: () {
                 Navigator.pushNamed(context, '/analytics');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.pushNamed(context, '/settings');
               },
             ),
           ],

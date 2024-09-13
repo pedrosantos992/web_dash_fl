@@ -12,16 +12,15 @@ class AnalyticsPage extends StatefulWidget {
 
 class _AnalyticsPageState extends State<AnalyticsPage> {
   List<dynamic> data = [];
-  String _selectedOption = "gender";
+  String _selectedOption = "country";
 
   @override
   void initState() {
     super.initState();
-    fetchDataFromGitHub();
+    fetchData();
   }
 
-  // Fetch JSON data from GitHub
-  Future<void> fetchDataFromGitHub() async {
+  Future<void> fetchData() async {
     final response = await http.get(Uri.parse(
         'https://raw.githubusercontent.com/pedrosantos992/web_dash_fl/main/assets/users.json'));
 
@@ -30,7 +29,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         data = json.decode(response.body);
       });
     } else {
-      throw Exception('Failed to load JSON data from GitHub');
+      throw Exception('Failed to load JSON data');
     }
   }
 
@@ -68,10 +67,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                       });
                     },
                   ),
-
                   const SizedBox(height: 20),
-
-                  // Display the chart based on the selected option
                   if (_selectedOption == "country")
                     Expanded(child: _buildBarChart())
                   else if (_selectedOption == "gender" ||
@@ -96,8 +92,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       child: Padding(
         padding: const EdgeInsets.only(top: 72.0),
         child: SizedBox(
-          width: chartData.length *
-              80.0, // Adjust width based on the number of bars
+          width: chartData.length * 80.0,
           child: BarChart(
             BarChartData(
               barGroups: chartData.entries.map((entry) {
