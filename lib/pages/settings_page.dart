@@ -34,9 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   value: widget.isDarkMode,
                   onChanged: (value) {
                     setState(() {
-                      setState(() {
-                        widget.toggleTheme(value); // Toggle theme mode
-                      });
+                      widget.toggleTheme(value);
                     });
                   },
                 ),

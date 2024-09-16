@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
         '/settings': (context) =>
             SettingsPage(toggleTheme: _toggleTheme, isDarkMode: _isDarkMode),
       },
-      initialRoute: '/', // Set the initial route
+      initialRoute: '/',
       debugShowCheckedModeBanner: false,
     );
   }
