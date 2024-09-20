@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_dash_fl/pages/contact_us_page.dart';
 import 'package:web_dash_fl/pages/home.dart';
 import 'package:web_dash_fl/pages/settings_page.dart';
 import 'pages/analytics_page.dart';
@@ -31,6 +32,7 @@ class _MyAppState extends State<MyApp> {
       home: const MyHomePage(title: "flutter demo"),
       routes: {
         '/analytics': (context) => const AnalyticsPage(),
+        '/contact-us': (context) => const ContactUsPage(),
         '/settings': (context) =>
             SettingsPage(toggleTheme: _toggleTheme, isDarkMode: _isDarkMode),
       },
