@@ -154,7 +154,31 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/contact-us');
+                  },
+                  child: const Text(
+                    'Contact us',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/settings');
+                  },
+                  child: const Text(
+                    'Settings',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
             ]
           : null,
     );
@@ -202,6 +226,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pushNamed(context, '/analytics');
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.contact_mail),
+              title: const Text('Contact us'),
+              onTap: () {
+                Navigator.pushNamed(context, '/contact-us');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.pushNamed(context, '/settings');
+              },
+            )
           ],
         ),
       ),
